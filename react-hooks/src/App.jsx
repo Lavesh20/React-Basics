@@ -1,39 +1,45 @@
-import { useEffect } from "react";
 import { useState } from "react";
+import { useEffect} from "react";
+import axios from "axios";
 
 function App() {
-   const [todos, setTodos] = useState([]);
+  const [Id, setId] = useState(1);
 
-   useEffect(()=>{
-    setInterval(()=>{
-      fetch("https://sum-server.100xdevs.com/todos")
-      .then(async(res)=>{
-       const json =await  res.json();
-       setTodos(json.todos);
-      })
-      },10000,[])
-    })
-  
-   
+  function handleButtonClick(newId) {
+    setId(newId);
+  }
+
   return (
-    
+    <>
+      <button onClick={() => handleButtonClick(1)}>1</button>
+      <button onClick={() => handleButtonClick(2)}>2</button>
+      <button onClick={() => handleButtonClick(3)}>3</button>
+      <button onClick={() => handleButtonClick(4)}>4</button>
+      <TodoId id={Id} />
+    </>
+  );
+
+  function TodoId({ id }) {
+    const [todos, setTodos] = useState([]);
+
+    useEffect(() => {
+      axios.get("https://sum-server.100xdevs.com/todo?id=" + id)
+        .then(function (res) {
+          setTodos(res.data.todo);
+        })
+        .catch(function (error) {
+          console.error("Error fetching data:", error);
+        });
+    }, [id]);
+
+    return (
       <div>
-      {todos.map(function(todo){
-       return <Todos key={todo.id} title = {todo.title} description = {todo.description}></Todos>
-      })}
+        Id : {id}
+        <h1>{todos.title}</h1>
+        <h3>{todos.description}</h3>
       </div>
-      
-    
-  )
-  function Todos({title,description}){
-   return (
-    <div>
-      <h1>{title}</h1>
-      <h3>{description}</h3>
-    </div>
-  
-   )
-}
+    );
+  }
 }
 
-export default App
+export default App;
