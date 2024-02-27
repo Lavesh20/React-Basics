@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useMemo } from "react";
 
-function App() {
+function Hook2() {
   const[input,setInput] = useState(1);
   const [counter,setCounter] = useState(0);  
   let sum = useMemo(()=>{
@@ -18,9 +18,9 @@ function App() {
       setInput(e.target.value);
     }} />
     <h3>{`The sum is ${sum}`}</h3><br />
-    <button onClick={()=>{
+    {/* <button onClick={()=>{
       setCounter(counter+1)
-    }}>Counter {counter}</button>
+    }}>Counter {counter}</button> */}
     </div>
    )
 
@@ -29,4 +29,4 @@ function App() {
   
 
 
-export default App;
+export default Hook2;
