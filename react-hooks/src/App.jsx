@@ -2,36 +2,22 @@
 
 
 
-import {useState } from "react";
-import {memo,useCallback} from "react";
-import Hook2 from "./Hook2";
-
-
+import {useRef, useState, useEffect } from "react";
 function App() {
-    const [count , setCount] = useState(0);
-    const inputFunction = useCallback(()=>{
-        console.log("Hi There")
-    },[])
- return (
-  <div>
-    <ButtonComponent inputFunction = {inputFunction}></ButtonComponent>
-    <button onClick={()=>{
-        setCount(count + 1)
-    }}>Counter {count}</button><br /><br />
-    <Hook2></Hook2>
-  </div>
- )
- 
+    const [incomeTax ,setIncomeTax] = useState(1000);
+    const divref = useRef()
+     useEffect(()=>{
+        setTimeout(()=>{
+            divref.current.innerHTML = 10;
+        },5000)
+           }) 
+  
+   return (
+    <div>
+      Hi there , your income tax returns are <div ref  = {divref}>{incomeTax}</div>
+    </div>
+   )
 }
-const ButtonComponent = memo(({inputFunction})=>{
-    console.log("child render")
-    return (
-      <div>
-          <button>Button Clicked</button>
-      </div>
-    )
-})
-
 export default App;
   
 
