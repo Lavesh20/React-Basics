@@ -1,52 +1,50 @@
-import { useContext, useMemo } from "react"
-import { CountContext } from "./context"
-import { RecoilRoot, useRecoilState, useRecoilValue, useSetRecoilState } from "recoil"
-import { countAtom } from "./store/atoms/count"
+import React, { useEffect } from 'react';
+import { RecoilRoot, useRecoilState, useRecoilValue } from 'recoil';
+import { notifications, totalNotificationSelector } from './atom';
+import axios from 'axios';
 
 function App() {
- return (
-    <div>
-      <RecoilRoot>
-      <Count/>
-      </RecoilRoot>
-       </div>
-       )
-}
-
-function CountRenderer(){
-  const count = useRecoilValue(countAtom)
-  const Iseven = useMemo(() => {
-    if (count % 2 === 0) {
-      return <h3>It is even</h3>;
-    } else {
-      return <h3>It is odd</h3>;
-    }
-  }, [count]);
- return (
-  <div>
-    {count}
-   {Iseven}
-  </div>
- )
-}
-
-function Count({}){
   return (
     <div>
- <CountRenderer></CountRenderer>
- <Button />
+      <RecoilRoot>
+        <MainApp></MainApp>
+      </RecoilRoot>
     </div>
-  )
+  );
 }
-function Button(){
-  // const [count,setCount] =useRecoilState(countAtom); 
-  const setCount = useSetRecoilState(countAtom);
-   return (
-    <div>
-      <button onClick={()=>{setCount(count=>count+1)}}>Increase</button>
-      <button onClick={()=>{setCount(count=>count-1)}}>Decrease</button>
-    </div>
-   )
+
+function MainApp() {
+  const [notificationCount, setNotificationCount] = useRecoilState(notifications);
+  const totalNotificationCount = useRecoilValue(totalNotificationSelector);
+
+  useEffect(() => {
+    axios.get("https://sum-server.100xdevs.com/notifications")
+      .then(function (res) {
+        setNotificationCount(res.data);
+      });
+  }, []);
+
+  const buttonStyle = {
+    padding: '8px 16px',
+    margin: '0 4px',
+    border: 'none',
+    borderRadius: '4px',
+    backgroundColor: '#fff',
+    color: '#333',
+    fontWeight: 'bold',
+    cursor: 'pointer',
+  };
+
+  return (
+    <>
+      <button style={buttonStyle}>Home</button>
+      <button style={buttonStyle}>My Network ({notificationCount.network})</button>
+      <button style={buttonStyle}>Jobs ({notificationCount.jobs})</button>
+      <button style={buttonStyle}>Messaging ({notificationCount.messaging})</button>
+      <button style={buttonStyle}>Notification ({notificationCount.notifications})</button>
+      <button style={{ ...buttonStyle, backgroundColor: '#0077B5', color: '#fff' }}>Me ({totalNotificationCount})</button>
+    </>
+  );
 }
 
 export default App;
