@@ -32,7 +32,7 @@ function MainApp() {
     backgroundColor: '#fff',
     color: '#333',
     fontWeight: 'bold',
-    cursor: 'pointer',
+    cursor: 'pointer'
   };
 
   return (
