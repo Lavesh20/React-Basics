@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { RecoilRoot, useRecoilState, useRecoilValue } from 'recoil';
+import { RecoilRoot, useRecoilState, useRecoilStateLoadable, useRecoilValue, useRecoilValueLoadable } from 'recoil';
 import { notifications, totalNotificationSelector } from './atom';
 import axios from 'axios';
 
@@ -14,15 +14,12 @@ function App() {
 }
 
 function MainApp() {
-  const [notificationCount, setNotificationCount] = useRecoilState(notifications);
-  const totalNotificationCount = useRecoilValue(totalNotificationSelector);
+  const [notificationCount, setNotificationCount] = useRecoilStateLoadable(notifications);
+  const totalNotificationCount = useRecoilValueLoadable(totalNotificationSelector);
 
   useEffect(() => {
-    axios.get("https://sum-server.100xdevs.com/notifications")
-      .then(function (res) {
-        setNotificationCount(res.data);
-      });
-  }, []);
+   
+  }, [                                     ]);
 
   const buttonStyle = {
     padding: '8px 16px',
